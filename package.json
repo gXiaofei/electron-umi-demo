@@ -5,14 +5,25 @@
     "description": "ibp-assistant",
     "main": "./src/main/main.ts",
     "scripts": {
-        "build": "max build",
-        "dev": "max dev",
+        "analyze": "cross-env ANALYZE=1 max build:renderer",
+        "build": "concurrently \"npm run build:renderer\" \"npm run build:main\"",
+        "build-icon": "electron-icon-builder --input=./src/assets/logo.png --output=temp --flatten",
+        "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./config/webpack.config.main.ts",
+        "build:renderer": "max build",
+        "builder": "electron-builder build -m",
+        "debug-mac:prod": "DEBUG_PROD=true npm run package",
+        "debug-win:prod": "npx cross-env DEBUG_PROD=true npm run package",
         "format": "prettier --cache --write .",
         "gulp-theme": "cd scripts && npx gulp less",
-        "postinstall": "max setup",
+        "postinstall": "concurrently \"max setup\" \"ts-node ./scripts/check-native-dep.js && electron-builder install-app-deps\"",
+        "package": "ts-node ./scripts/clean.js dist build && npm run build && npm run builder",
         "prepare": "husky install",
+        "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir release/app",
         "setup": "max setup",
-        "start": "npm run dev"
+        "start": "concurrently \"npm run start:renderer\" \"wait-on http://127.0.0.1:3355 && npm run start:main\"",
+        "start:main": "cross-env NODE_ENV=development electronmon -r ts-node/register/transpile-only .",
+        "start:preload": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./config/webpack.config.preload.ts",
+        "start:renderer": "max dev"
     },
     "dependencies": {
         "@ant-design/icons": "^4.7.0",
@@ -20,7 +31,6 @@
         "@parcel/watcher": "^2.0.5",
         "@umijs/max": "^4.0.15",
         "antd": "^4.20.7",
-        "classname": "^0.0.0",
         "electron-debug": "^3.2.0",
         "electron-log": "^4.4.8",
         "electron-store": "^8.1.0",
@@ -32,11 +42,12 @@
     "devDependencies": {
         "@types/classnames": "^2.3.1",
         "@types/lodash": "^4.14.184",
+        "@types/node": "^18.7.14",
         "@types/react": "^18.0.0",
         "@types/react-dom": "^18.0.0",
         "@types/webpack-bundle-analyzer": "^4.4.2",
         "autoprefixer": "^10.4.8",
-        "chalk": "^5.0.1",
+        "chalk": "^4.1.2",
         "concurrently": "^7.3.0",
         "cross-env": "^7.0.3",
         "cross-port-killer": "^1.4.0",
@@ -67,5 +78,74 @@
         "webpack-bundle-analyzer": "^4.6.1",
         "webpack-cli": "^4.10.0",
         "webpack-merge": "^5.8.0"
+    },
+    "engines": {
+        "node": ">=12.0.0"
+    },
+    "build": {
+        "productName": "ElectronReact",
+        "appId": "org.erb.ElectronReact",
+        "asar": false,
+        "asarUnpack": "**\\*.{node,dll}",
+        "files": [
+            "dist",
+            "node_modules",
+            "package.json"
+        ],
+        "afterSign": "./scripts/notarize.js",
+        "mac": {
+            "target": {
+                "target": "default",
+                "arch": [
+                    "arm64",
+                    "x64"
+                ]
+            },
+            "type": "distribution",
+            "hardenedRuntime": true,
+            "entitlements": "./src/assets/entitlements.mac.plist",
+            "entitlementsInherit": "./src/assets/entitlements.mac.plist",
+            "gatekeeperAssess": false
+        },
+        "dmg": {
+            "contents": [
+                {
+                    "x": 130,
+                    "y": 220
+                },
+                {
+                    "x": 410,
+                    "y": 220,
+                    "type": "link",
+                    "path": "/Applications"
+                }
+            ]
+        },
+        "win": {
+            "target": [
+                "nsis"
+            ]
+        },
+        "linux": {
+            "target": [
+                "AppImage"
+            ],
+            "category": "Development"
+        },
+        "directories": {
+            "app": "release/app",
+            "buildResources": "src/assets",
+            "output": "release/build"
+        },
+        "extraResources": [
+            "./src/assets/**"
+        ]
+    },
+    "electronmon": {
+        "patterns": [
+            "!**/**",
+            "src/main/*"
+        ],
+        "logLevel": "quiet"
     }
 }

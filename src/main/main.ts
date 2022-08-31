@@ -84,9 +84,9 @@ const installExtensions = async () => {
 
 // 创建窗口
 const createWindow = async () => {
-    if (process.env.NODE_ENV === 'development') {
-        await installExtensions();
-    }
+    // if (process.env.NODE_ENV === 'development') {
+    //     await installExtensions();
+    // }
 
     const RESOURCES_PATH = app.isPackaged
         ? path.join(process.resourcesPath, 'assets')
@@ -98,8 +98,8 @@ const createWindow = async () => {
 
     mainWindow = new BrowserWindow({
         show: false,
-        width: 480,
-        height: 580,
+        width: MIN_WIDTH,
+        height: MIN_HEIGHT,
         icon: getAssetPath('icon.png'),
         center: true,
         resizable: false,
@@ -127,12 +127,12 @@ const createWindow = async () => {
         }
     });
 
-    unsubscribeStore = subscribeStore(mainWindow);
+    // unsubscribeStore = subscribeStore(mainWindow);
 
     mainWindow.on('closed', () => {
         console.log('closed');
         mainWindow = null;
-        unsubscribeStore();
+        // unsubscribeStore();
     });
 
     const menuBuilder = new MenuBuilder(mainWindow);
