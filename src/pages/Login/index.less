@@ -1,0 +1,57 @@
+// @import (reference) '~antd/es/style/themes/index';
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: #f6f6f6;
+    // 拖拽
+    // .drag {
+    //     position: fixed;
+    //     top: 0;
+    //     width: 100vw;
+    //     height: 30px;
+    //     -webkit-app-region: drag;
+    // }
+
+    .loginBox {
+        width: 328px;
+    }
+
+    .formFooter {
+        margin-top: 10px;
+    }
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 48px;
+    .title {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        img {
+            width: 44px;
+            height: 44px;
+            margin-right: 16px;
+            border-style: none;
+        }
+        h1 {
+            margin-bottom: 0;
+            font-weight: 600;
+            font-size: 33px;
+        }
+    }
+    > p {
+        width: 100%;
+        margin-top: 12px;
+        margin-bottom: 0;
+        color: rgba(0, 0, 0, 0.45);
+        font-size: 14px;
+    }
+}
