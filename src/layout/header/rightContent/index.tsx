@@ -6,6 +6,8 @@ import { Space, Switch } from 'antd';
 import { useState } from 'react';
 import { useThemeSwitcher } from 'react-css-theme-switcher';
 import styles from './index.less';
+import { switcherTheme } from '@/themes/themeSwitcher';
+import themeMap from '@/themes/theme';
 
 const RightContent = () => {
     const { initialState, setInitialState } = useModel('@@initialState');
@@ -20,10 +22,16 @@ const RightContent = () => {
             theme: isChecked ? 'dark' : 'light',
         } as initialStateType);
         switcher({ theme: isChecked ? themes.dark : themes.light });
+
+        switcherTheme({
+            watch: true,
+            onlyLegacy: true,
+            variables: themeMap[isChecked ? themes.dark : themes.light],
+        });
     };
 
     return (
-        <div className={styles.rightContent}>
+        <div className={styles.rightContent} id="rightContent">
             <Space>
                 <Notice />
                 <Avatar />

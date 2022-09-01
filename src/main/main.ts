@@ -84,9 +84,14 @@ const installExtensions = async () => {
 
 // 创建窗口
 const createWindow = async () => {
-    // if (process.env.NODE_ENV === 'development') {
-    //     await installExtensions();
-    // }
+    /**
+     * 存在些问题，可以先注释掉
+     *
+     * https://github.com/MarshallOfSound/electron-devtools-installer/issues/220
+     * */
+    if (process.env.NODE_ENV === 'development') {
+        await installExtensions();
+    }
 
     const RESOURCES_PATH = app.isPackaged
         ? path.join(process.resourcesPath, 'assets')
