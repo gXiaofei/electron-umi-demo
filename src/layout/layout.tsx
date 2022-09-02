@@ -1,6 +1,6 @@
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { initialStateType } from '@/app';
-import { useModel } from '@umijs/max';
+import { useModel, useAppData, useLocation } from '@umijs/max';
 import { Button } from 'antd';
 import { useEffect, useState } from 'react';
 import { ThemeSwitcherProvider } from 'react-css-theme-switcher';
@@ -11,6 +11,7 @@ import Sider from './sider';
 import useTheme from '@/hooks/useTheme';
 import isElectron from 'is-electron';
 import { initTheme } from '@/themes/themeSwitcher';
+import { routeType } from '../../config/routes';
 
 const themes = {
     dark: 'styles/dark-theme.css',
@@ -20,8 +21,34 @@ const themes = {
 export default () => {
     const { initialState, setInitialState } = useModel('@@initialState');
     const [collapsed, setCollapsed] = useState(false);
-
+    const [menuRender, setMenuRender] = useState(false);
     const { themeName } = useTheme();
+    const { routes } = useAppData();
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+        /** 根据路由menuRender属性来设置显示header和sider */
+
+        let routesArr: routeType[] = [];
+
+        try {
+            routesArr = Object.values(routes);
+        } catch (e) {
+            console.log(e);
+        }
+
+        const currentRouteProps = routesArr?.find(
+            (route: routeType) => route.path === pathname,
+        );
+        if (currentRouteProps) {
+            if (currentRouteProps.menuRender === undefined) {
+                if (!menuRender) setMenuRender(true);
+            } else {
+                if (currentRouteProps.menuRender !== menuRender)
+                    setMenuRender(currentRouteProps.menuRender);
+            }
+        }
+    }, [pathname, menuRender]);
 
     useEffect(() => {
         // mac 跟随系统设置主题色
@@ -63,20 +90,30 @@ export default () => {
             defaultTheme={initialState?.theme}
         >
             <div className={styles.container}>
-                <Header />
-                <div className={styles.content}>
-                    <Sider collapsed={collapsed} />
-                    <div className={styles.pageContainer}>
-                        <Button
-                            type="primary"
-                            className={styles.collapsedBtn}
-                            onClick={toggleCollapsed}
-                        >
-                            {collapsed ? <RightOutlined /> : <LeftOutlined />}
-                        </Button>
-                        <Outlet />
-                    </div>
-                </div>
+                {menuRender ? (
+                    <>
+                        <Header />
+                        <div className={styles.content}>
+                            <Sider collapsed={collapsed} />
+                            <div className={styles.pageContainer}>
+                                <Button
+                                    type="primary"
+                                    className={styles.collapsedBtn}
+                                    onClick={toggleCollapsed}
+                                >
+                                    {collapsed ? (
+                                        <RightOutlined />
+                                    ) : (
+                                        <LeftOutlined />
+                                    )}
+                                </Button>
+                                <Outlet />
+                            </div>
+                        </div>
+                    </>
+                ) : (
+                    <Outlet />
+                )}
             </div>
         </ThemeSwitcherProvider>
     );

@@ -64,7 +64,9 @@ const Sider: React.FC<IProps> = ({ collapsed }) => {
     const renderMenus = useMemo(() => {
         let menus = routes
             .find((item) => item.component === '@/layout/layout')
-            ?.routes?.filter((item) => !item.hideInMenu);
+            ?.routes?.filter(
+                (item) => !item.hideInMenu && item.menuRender !== false,
+            );
         const renderMenuHeader: routeType[] = [];
         const renderMenuBottom: routeType[] = [];
         menus?.forEach((item) => {

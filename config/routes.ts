@@ -1,16 +1,17 @@
 export default [
-    {
-        path: '/login',
-        layout: false,
-        name: '登录',
-        component: './Login',
-    },
     { path: '/', redirect: '/home' },
     {
         exact: false,
         path: '/',
         component: '@/layout/layout',
         routes: [
+            {
+                path: '/login',
+                layout: false,
+                name: '登录',
+                component: './Login',
+                menuRender: false,
+            },
             {
                 path: '/home',
                 name: '首页',
@@ -96,4 +97,6 @@ export type routeType = {
     name?: string;
     routes?: routeType[];
     icon?: string;
+    menuRender?: boolean;
+    hideInMenu?: boolean;
 };
