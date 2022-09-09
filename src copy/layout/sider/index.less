@@ -1,0 +1,22 @@
+.sider {
+    border-right: 1px solid var(--border-color);
+    height: 100%;
+    box-sizing: border-box;
+    padding: 5px;
+    transition: width 0.2s ease-in;
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+    :global {
+        .ant-menu.ant-menu-inline-collapsed {
+            width: 56px;
+        }
+        .ant-menu {
+            border-right: 0px;
+
+            .ant-menu-item {
+                border-radius: 5px;
+            }
+        }
+    }
+}

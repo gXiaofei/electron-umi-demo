@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkibp=self.webpackChunkibp||[]).push([[202],{40470:function(t,s,i){i.r(s);var n=i(85893),u=function(){return(0,n.jsx)("div",{children:"TransmissionList"})};s.default=u}}]);

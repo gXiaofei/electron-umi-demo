@@ -1,0 +1,60 @@
+{
+    "extends": "./src/.umi/tsconfig.json",
+    "compilerOptions": {
+        "outDir": "release/app/dist",
+        "module": "commonjs",
+        "target": "es2021",
+        "lib": ["es2021", "dom"],
+        "sourceMap": true,
+        // "baseUrl": "./src",
+        "jsx": "react-jsx",
+        "declaration": true,
+        "declarationMap": true,
+        "pretty": true,
+        "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true,
+        "noFallthroughCasesInSwitch": true,
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitReturns": true,
+        "noUnusedParameters": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "noUnusedLocals": true,
+        "allowJs": true,
+        "skipLibCheck": true,
+        "experimentalDecorators": true,
+        "strict": true,
+        "paths": {
+            "@/*": ["./src/*"],
+            "@@/*": ["./src/.umi/*"]
+        }
+    },
+    "include": [
+        "mock/**/*",
+        "src/**/*",
+        "tests/**/*",
+        "test/**/*",
+        "__test__/**/*",
+        "typings/**/*",
+        "config/**/*",
+        ".eslintrc.js",
+        ".prettierrc.js",
+        "typings.*"
+    ],
+    "exclude": [
+        "node_modules",
+        "build",
+        "dist",
+        "scripts",
+        "src/.umi/*",
+        "webpack",
+        "jest",
+        "tests",
+        "test",
+        "release/build",
+        "release/app/dist",
+        "dll",
+        "assets/js/*.js"
+    ]
+}

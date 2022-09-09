@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkibp=self.webpackChunkibp||[]).push([[901],{92016:function(r,u,t){t.r(u);var e=t(85893),n=function(){return(0,e.jsx)("div",{children:"\u9879\u76EE\u5E95\u7A3F"})};u.default=n}}]);
